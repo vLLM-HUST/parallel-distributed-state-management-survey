@@ -1,0 +1,24 @@
+\begin{tikzpicture}[
+  node distance=9mm and 8mm,
+  block/.style={draw, rounded corners, thick, align=center, minimum width=28mm, minimum height=9mm, fill=black!3},
+  side/.style={draw, rounded corners, align=center, minimum width=24mm, minimum height=8mm, fill=black!2},
+  arrow/.style={-{Latex[length=2.5mm]}, thick}
+]
+\node[block] (observe) {Observe\\state};
+\node[block, right=of observe] (model) {Model\\boundaries};
+\node[block, right=of model] (schedule) {Schedule\\and place};
+\node[block, right=of schedule] (update) {Update and\\retain};
+
+\draw[arrow] (observe) -- (model);
+\draw[arrow] (model) -- (schedule);
+\draw[arrow] (schedule) -- (update);
+\draw[arrow, bend left=18] (update.north) to node[above] {telemetry feedback} (observe.north);
+
+\node[side, below=10mm of model] (hardware) {hardware topology};
+\node[side, below=10mm of schedule] (service) {latency, energy, quality};
+\node[side, below=10mm of update] (memory) {retention and reuse};
+
+\draw[arrow] (hardware.north) -- (model.south);
+\draw[arrow] (service.north) -- (schedule.south);
+\draw[arrow] (memory.north) -- (update.south);
+\end{tikzpicture}

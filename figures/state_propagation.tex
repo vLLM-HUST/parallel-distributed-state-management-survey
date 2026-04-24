@@ -1,0 +1,20 @@
+\begin{tikzpicture}[
+  node distance=10mm and 8mm,
+  box/.style={draw, rounded corners, thick, align=center, minimum width=33mm, minimum height=10mm, fill=black!3},
+  note/.style={draw, rounded corners, align=left, inner sep=4pt, fill=black!2},
+  arrow/.style={-{Latex[length=2.5mm]}, thick}
+]
+\node[box] (access) {State access\\and scheduling};
+\node[box, right=of access] (exec) {State-aware\\execution};
+\node[box, right=of exec] (evo) {State evolution\\and reuse};
+
+\draw[arrow] (access) -- node[above, align=center] {conflicts, locality,\\queueing} (exec);
+\draw[arrow] (exec) -- node[above, align=center] {cost, quality,\\resource usage} (evo);
+\draw[arrow, bend left=18] (evo.north) to node[above, align=center] {future hotspots,\\memory pressure} (access.north);
+
+\node[note, below=12mm of exec, text width=107mm] (note1) {
+\textbf{Propagation view.} Local mismatches rarely stay local. Hidden access contention distorts execution decisions; poorly modeled execution reshapes what can be updated or retained; aggressive updates feed back into later access pressure and reuse quality.
+};
+
+\draw[arrow] (exec.south) -- (note1.north);
+\end{tikzpicture}
