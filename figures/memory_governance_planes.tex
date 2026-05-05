@@ -1,0 +1,33 @@
+\begin{tikzpicture}[
+  node distance=8mm and 10mm,
+  plane/.style={draw, rounded corners, thick, align=center, minimum width=44mm, minimum height=11mm, fill=black!3},
+  control/.style={draw, rounded corners, align=center, minimum width=34mm, minimum height=10mm, fill=black!2},
+  side/.style={draw, rounded corners, align=center, minimum width=28mm, minimum height=9mm, fill=black!1},
+  arrow/.style={-{Latex[length=2.5mm]}, thick}
+]
+
+\node[side] (telemetry) {shared telemetry\\SLOs, drift, budgets};
+
+\node[plane, right=18mm of telemetry] (serving) {Serving memory plane\\KV pages, adapters, phase queues};
+\node[plane, below=of serving] (retrieval) {Retrieval memory plane\\indexes, graphs, refresh traces};
+\node[plane, below=of retrieval] (retention) {Retention memory plane\\replay buffers, protected state, compressed memory};
+
+\node[control, right=16mm of serving] (servingc) {admission, placement,\\phase transfer control};
+\node[control, right=16mm of retrieval] (retrievalc) {refresh, rebuild,\\planner-trigger control};
+\node[control, right=16mm of retention] (retentionc) {retention selection,\\compression, compaction};
+
+\draw[arrow] (telemetry.east) -- (serving.west);
+\draw[arrow] (telemetry.east) -- (retrieval.west);
+\draw[arrow] (telemetry.east) -- (retention.west);
+
+\draw[arrow] (serving.east) -- (servingc.west);
+\draw[arrow] (retrieval.east) -- (retrievalc.west);
+\draw[arrow] (retention.east) -- (retentionc.west);
+
+\draw[arrow, bend left=18] (servingc.north) to node[above, align=center] {queueing, reuse,\\tail-latency feedback} (telemetry.north);
+\draw[arrow, bend right=12] (retrievalc.west) to node[below, align=center] {freshness, staleness,\\maintenance debt} (telemetry.south east);
+\draw[arrow, bend right=22] (retentionc.south) to node[below, align=center] {future utility, forgetting,\\storage pressure} (telemetry.south);
+
+\draw[arrow, dashed] (serving.south) -- node[right, align=center] {longer-lived reuse\\and update traces} (retrieval.north);
+\draw[arrow, dashed] (retrieval.south) -- node[right, align=center] {persistent value\\and retention policies} (retention.north);
+\end{tikzpicture}
