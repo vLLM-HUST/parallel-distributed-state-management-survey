@@ -1,29 +1,28 @@
 \begin{tikzpicture}[
-  node distance=8mm and 8mm,
-  block/.style={draw, rounded corners, thick, align=center, minimum width=29mm, minimum height=10mm, fill=black!3},
-  guard/.style={draw, rounded corners, align=center, minimum width=25mm, minimum height=8mm, fill=black!1},
+  block/.style={draw, rounded corners, thick, align=center, minimum width=30mm, minimum height=10mm, fill=black!3},
+  guard/.style={draw, rounded corners, align=center, minimum width=26mm, minimum height=8mm, fill=black!1},
+  note/.style={align=center, fill=white, inner sep=1pt, font=\small},
   arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
 ]
 
-\node[block] (catalog) {State catalog\\schema, lifecycle,\\quality sensitivity};
-\node[block, right=of catalog] (observe) {Observation\\steady signals,\\disturbance alerts};
-\node[block, right=of observe] (kernel) {Decision kernel\\hard constraints,\\soft objectives};
-\node[block, right=of kernel] (actuate) {Actuation APIs\\migrate, refresh,\\compact, admit};
-\node[block, right=of actuate] (safety) {Safety envelope\\rollback, replay,\\no-eviction rules};
-\path (observe.north) ++(0,8mm) coordinate (feedbackL);
-\path (safety.north) ++(0,8mm) coordinate (feedbackR);
+\node[block] (catalog) at (0,0) {State catalog\\schema, lifecycle,\\quality sensitivity};
+\node[block] (observe) at (3.7,0) {Observation\\steady signals,\\disturbance alerts};
+\node[block] (kernel) at (7.4,0) {Decision kernel\\hard constraints,\\soft objectives};
+\node[block] (actuate) at (11.1,0) {Actuation APIs\\migrate, refresh,\\compact, admit};
+\node[block] (safety) at (14.8,0) {Safety envelope\\rollback, replay,\\no-eviction rules};
+\node[note] (fb) at (9.3,1.95) {validated outcomes,\\violations, debt};
 
-\draw[arrow] (catalog) -- (observe);
-\draw[arrow] (observe) -- (kernel);
-\draw[arrow] (kernel) -- (actuate);
-\draw[arrow] (actuate) -- (safety);
-\draw[arrow] (safety.north) -- (feedbackR) -- node[midway, above=2pt, align=center, fill=white, inner sep=1pt, font=\small] {validated outcomes,\\violations, debt} (feedbackL) -- (observe.north);
+\node[guard] (g1) at (0,-2.2) {typed state\\ownership contracts};
+\node[guard] (g2) at (3.7,-2.2) {confidence and\\delay metadata};
+\node[guard] (g3) at (7.4,-2.2) {precedence,\\utility, budgets};
+\node[guard] (g4) at (11.1,-2.2) {idempotence and\\bounded rollback};
+\node[guard] (g5) at (14.8,-2.2) {recovery invariants\\and guardrails};
 
-\node[guard, below=10mm of catalog] (g1) {typed state\\ownership contracts};
-\node[guard, below=10mm of observe] (g2) {confidence and\\delay metadata};
-\node[guard, below=10mm of kernel] (g3) {precedence,\\utility, budgets};
-\node[guard, below=10mm of actuate] (g4) {idempotence and\\bounded rollback};
-\node[guard, below=10mm of safety] (g5) {recovery invariants\\and guardrails};
+\draw[arrow] (catalog.east) -- (observe.west);
+\draw[arrow] (observe.east) -- (kernel.west);
+\draw[arrow] (kernel.east) -- (actuate.west);
+\draw[arrow] (actuate.east) -- (safety.west);
+\draw[arrow] (safety.north) |- (15.4,1.45) -- (3.1,1.45) |- (observe.north);
 
 \draw[arrow] (g1.north) -- (catalog.south);
 \draw[arrow] (g2.north) -- (observe.south);

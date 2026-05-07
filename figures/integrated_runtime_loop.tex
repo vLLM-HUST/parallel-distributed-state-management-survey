@@ -1,24 +1,23 @@
 \begin{tikzpicture}[
-  node distance=9mm and 8mm,
-  block/.style={draw, rounded corners, thick, align=center, minimum width=28mm, minimum height=9mm, fill=black!3},
-  side/.style={draw, rounded corners, align=center, minimum width=24mm, minimum height=8mm, fill=black!2},
+  block/.style={draw, rounded corners, thick, align=center, minimum width=29mm, minimum height=9mm, fill=black!3},
+  side/.style={draw, rounded corners, align=center, minimum width=25mm, minimum height=8mm, fill=black!2},
+  note/.style={align=center, fill=white, inner sep=1pt, font=\small},
   arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
 ]
-\node[block] (observe) {Observe\\state};
-\node[block, right=of observe] (model) {Model\\boundaries};
-\node[block, right=of model] (schedule) {Schedule\\and place};
-\node[block, right=of schedule] (update) {Update and\\retain};
-\path (observe.north) ++(0,8mm) coordinate (feedbackL);
-\path (update.north) ++(0,8mm) coordinate (feedbackR);
+\node[block] (observe) at (0,0) {Observe\\state};
+\node[block] (model) at (3.6,0) {Model\\boundaries};
+\node[block] (schedule) at (7.2,0) {Schedule\\and place};
+\node[block] (update) at (10.8,0) {Update and\\retain};
+\node[note] (fb) at (5.4,1.9) {telemetry feedback};
 
-\draw[arrow] (observe) -- (model);
-\draw[arrow] (model) -- (schedule);
-\draw[arrow] (schedule) -- (update);
-\draw[arrow] (update.north) -- (feedbackR) -- node[midway, above=2pt, fill=white, inner sep=1pt, font=\small] {telemetry feedback} (feedbackL) -- (observe.north);
+\node[side] (hardware) at (3.6,-2.05) {hardware topology};
+\node[side] (service) at (7.2,-2.05) {latency, energy, quality};
+\node[side] (memory) at (10.8,-2.05) {retention and reuse};
 
-\node[side, below=10mm of model] (hardware) {hardware topology};
-\node[side, below=10mm of schedule] (service) {latency, energy, quality};
-\node[side, below=10mm of update] (memory) {retention and reuse};
+\draw[arrow] (observe.east) -- (model.west);
+\draw[arrow] (model.east) -- (schedule.west);
+\draw[arrow] (schedule.east) -- (update.west);
+\draw[arrow] (update.north) |- (11.4,1.35) -- (-0.3,1.35) |- (observe.north);
 
 \draw[arrow] (hardware.north) -- (model.south);
 \draw[arrow] (service.north) -- (schedule.south);

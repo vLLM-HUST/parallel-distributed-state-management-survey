@@ -1,22 +1,24 @@
 \begin{tikzpicture}[
-  node distance=10mm and 12mm,
-  box/.style={draw, rounded corners, thick, align=center, minimum width=31mm, minimum height=10mm, fill=black!3},
+  box/.style={draw, rounded corners, thick, align=center, minimum width=32mm, minimum height=10mm, fill=black!3},
   note/.style={draw, rounded corners, align=left, inner sep=4pt, fill=black!2},
+  labelnote/.style={align=center, fill=white, inner sep=1pt, font=\small},
   arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
 ]
-\node[box] (access) {State access\\and scheduling};
-\node[box, right=of access] (exec) {State-aware\\execution};
-\node[box, right=of exec] (evo) {State evolution\\and reuse};
-\path (access.north) ++(0,9mm) coordinate (feedbackL);
-\path (evo.north) ++(0,9mm) coordinate (feedbackR);
-
-\draw[arrow] (access) -- node[pos=0.46, above=5pt, align=center, fill=white, inner sep=1pt, font=\small] {conflicts, locality,\\queueing} (exec);
-\draw[arrow] (exec) -- node[pos=0.54, above=5pt, align=center, fill=white, inner sep=1pt, font=\small] {cost, quality,\\resource usage} (evo);
-\draw[arrow] (evo.north) -- (feedbackR) -- node[midway, above=2pt, align=center, fill=white, inner sep=1pt, font=\small] {future hotspots,\\memory pressure} (feedbackL) -- (access.north);
-
-\node[note, below=12mm of exec, text width=107mm] (note1) {
+\node[box] (access) at (0,0) {State access\\and scheduling};
+\node[box] (exec) at (4.3,0) {State-aware\\execution};
+\node[box] (evo) at (8.6,0) {State evolution\\and reuse};
+\node[labelnote] (l1) at (2.15,0.8) {conflicts, locality,\\queueing};
+\node[labelnote] (l2) at (6.45,0.8) {cost, quality,\\resource usage};
+\node[labelnote] (fb) at (4.3,2.0) {future hotspots,\\memory pressure};
+\node[note, text width=108mm] (note1) at (4.3,-2.15) {
 \textbf{Propagation view.} Local mismatches rarely stay local. Hidden access contention distorts execution decisions; poorly modeled execution reshapes what can be updated or retained; aggressive updates feed back into later access pressure and reuse quality.
 };
 
+\coordinate (topL) at (-0.4,1.45);
+\coordinate (topR) at (9.0,1.45);
+
+\draw[arrow] (access.east) -- (exec.west);
+\draw[arrow] (exec.east) -- (evo.west);
+\draw[arrow] (evo.north) |- (topR) -- (topL) |- (access.north);
 \draw[arrow] (exec.south) -- (note1.north);
 \end{tikzpicture}

@@ -1,32 +1,32 @@
 \begin{tikzpicture}[
-  node distance=7mm and 8mm,
-  seam/.style={draw, rounded corners, thick, align=center, minimum width=34mm, minimum height=11mm, fill=black!3},
-  control/.style={draw, rounded corners, align=center, minimum width=30mm, minimum height=9mm, fill=black!1},
-  metric/.style={draw, rounded corners, align=center, minimum width=24mm, minimum height=8mm, fill=black!1},
-  note/.style={align=center, fill=white, inner sep=1pt},
+  seam/.style={draw, rounded corners, thick, align=center, minimum width=35mm, minimum height=11mm, fill=black!3},
+  control/.style={draw, rounded corners, align=center, minimum width=31mm, minimum height=9mm, fill=black!1},
+  metric/.style={draw, rounded corners, align=center, minimum width=25mm, minimum height=8mm, fill=black!1},
+  note/.style={align=center, fill=white, inner sep=1pt, font=\footnotesize},
   arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
 ]
 
-\node[metric] (telemetry) {telemetry\\topology, skew,\\error, SLA};
+\node[metric] (telemetry) at (0,0.2) {telemetry\\topology, skew,\\error, SLA};
 
-\node[seam, right=16mm of telemetry] (repr) {Representation seam\\compressed tuples,\\samples, dictionaries};
-\node[seam, right=of repr] (path) {Execution-path seam\\device mapping,\\movement, decompression};
-\node[seam, right=of path] (budget) {Boundary seam\\quality budget,\\latency cap, energy cap};
+\node[seam] (repr) at (4.4,1.4) {Representation seam\\compressed tuples,\\samples, dictionaries};
+\node[seam] (path) at (8.9,1.4) {Execution-path seam\\device mapping,\\movement, decompression};
+\node[seam] (budget) at (13.4,1.4) {Boundary seam\\quality budget,\\latency cap, energy cap};
 
-\node[control, below=11mm of repr] (c1) {format switch\\sampling rate\\fidelity tier};
-\node[control, below=11mm of path] (c2) {CPU/GPU choice\\operator path\\transfer timing};
-\node[control, below=11mm of budget] (c3) {compensation\\admission\\fallback mode};
-\path (telemetry.north east) ++(0,8mm) coordinate (highL);
-\path (c3.north east) ++(0,8mm) coordinate (highR);
-\path (telemetry.south east) ++(0,-2mm) coordinate (midL);
-\path (c2.west) ++(-8mm,0) coordinate (midR);
-\path (telemetry.south) ++(0,-8mm) coordinate (lowL);
-\path (c1.south) ++(0,-8mm) coordinate (lowR);
-\node[note, above=5mm of budget] (n3) {measured error\\and boundary failures};
-\node[note, below=3mm of c2] (n2) {movement cost\\and queueing};
-\node[note, below=3mm of c1] (n1) {compression ratio\\and reuse density};
+\node[control] (c1) at (4.4,-1.1) {format switch\\sampling rate\\fidelity tier};
+\node[control] (c2) at (8.9,-1.1) {CPU/GPU choice\\operator path\\transfer timing};
+\node[control] (c3) at (13.4,-1.1) {compensation\\admission\\fallback mode};
 
-\draw[arrow] (telemetry.east) -- (repr.west);
+\node[note] (n1) at (4.4,-2.55) {compression ratio\\and reuse density};
+\node[note] (n2) at (8.9,-2.55) {movement cost\\and queueing};
+\node[note] (n3) at (13.4,-2.55) {measured error\\and boundary failures};
+\node[note] (loop) at (7.2,3.9) {closed-loop retuning across\\representation, execution, and boundary control};
+
+\coordinate (split) at (1.8,0.2);
+\coordinate (busR) at (14.2,-3.45);
+\coordinate (busL) at (0.5,-3.45);
+
+\draw[arrow] (telemetry.east) -- (split);
+\draw[arrow] (split) |- (repr.west);
 \draw[arrow] (repr.east) -- (path.west);
 \draw[arrow] (path.east) -- (budget.west);
 
@@ -34,7 +34,9 @@
 \draw[arrow] (path.south) -- (c2.north);
 \draw[arrow] (budget.south) -- (c3.north);
 
-\draw[arrow] (c3.north east) -- (highR) -- (highL) -- (telemetry.north east);
-\draw[arrow] (c2.west) -- (midR) -- (midL) -- (telemetry.south east);
-\draw[arrow] (c1.south) -- (lowR) -- (lowL) -- (telemetry.south);
+\draw[arrow] (c1.south) -- (n1.north);
+\draw[arrow] (c2.south) -- (n2.north);
+\draw[arrow] (c3.south) -- (n3.north);
+
+\draw[arrow] (n3.east) |- (15.0,3.15) -- (-0.3,3.15) |- (telemetry.north);
 \end{tikzpicture}

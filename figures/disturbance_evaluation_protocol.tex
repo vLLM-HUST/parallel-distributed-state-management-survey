@@ -1,28 +1,27 @@
 \begin{tikzpicture}[
-  node distance=7mm and 6mm,
-  phase/.style={draw, rounded corners, thick, align=center, minimum width=24mm, minimum height=10mm, fill=black!3},
-  metric/.style={draw, rounded corners, align=center, minimum width=28mm, minimum height=8mm, fill=black!1},
+  phase/.style={draw, rounded corners, thick, align=center, minimum width=25mm, minimum height=10mm, fill=black!3},
+  metric/.style={draw, rounded corners, align=center, minimum width=29mm, minimum height=8mm, fill=black!1},
+  note/.style={align=center, fill=white, inner sep=1pt, font=\small},
   arrow/.style={-{Latex[length=2.5mm]}, thick, shorten <=2pt, shorten >=2pt}
 ]
 
-\node[phase] (warmup) {Warmup\\steady state};
-\node[phase, right=of warmup] (burst) {Burst\\hotspot flip};
-\node[phase, right=of burst] (reconfig) {Reconfigure\\migrate or fail};
-\node[phase, right=of reconfig] (drift) {Drift\\quality shift};
-\node[phase, right=of drift] (long) {Long horizon\\maintenance debt};
-\path (warmup.north) ++(0,8mm) coordinate (feedbackL);
-\path (long.north) ++(0,8mm) coordinate (feedbackR);
+\node[phase] (warmup) at (0,0) {Warmup\\steady state};
+\node[phase] (burst) at (3.2,0) {Burst\\hotspot flip};
+\node[phase] (reconfig) at (6.4,0) {Reconfigure\\migrate or fail};
+\node[phase] (drift) at (9.6,0) {Drift\\quality shift};
+\node[phase] (long) at (12.8,0) {Long horizon\\maintenance debt};
+\node[note] (fb) at (6.4,1.95) {policy retuning\\or rebuild trigger};
 
-\draw[arrow] (warmup) -- (burst);
-\draw[arrow] (burst) -- (reconfig);
-\draw[arrow] (reconfig) -- (drift);
-\draw[arrow] (drift) -- (long);
+\node[metric] (m1) at (0,-2.2) {throughput\\resource cost};
+\node[metric] (m2) at (3.2,-2.2) {p99 latency\\conflict density};
+\node[metric] (m3) at (6.4,-2.2) {recovery lag\\migration debt};
+\node[metric] (m4) at (9.6,-2.2) {quality floor\\freshness};
+\node[metric] (m5) at (12.8,-2.2) {maintenance spikes\\reuse decay};
 
-\node[metric, below=10mm of warmup] (m1) {throughput\\resource cost};
-\node[metric, below=10mm of burst] (m2) {p99 latency\\conflict density};
-\node[metric, below=10mm of reconfig] (m3) {recovery lag\\migration debt};
-\node[metric, below=10mm of drift] (m4) {quality floor\\freshness};
-\node[metric, below=10mm of long] (m5) {maintenance spikes\\reuse decay};
+\draw[arrow] (warmup.east) -- (burst.west);
+\draw[arrow] (burst.east) -- (reconfig.west);
+\draw[arrow] (reconfig.east) -- (drift.west);
+\draw[arrow] (drift.east) -- (long.west);
 
 \draw[arrow] (warmup.south) -- (m1.north);
 \draw[arrow] (burst.south) -- (m2.north);
@@ -30,5 +29,5 @@
 \draw[arrow] (drift.south) -- (m4.north);
 \draw[arrow] (long.south) -- (m5.north);
 
-\draw[arrow] (long.north) -- (feedbackR) -- node[midway, above=2pt, align=center, fill=white, inner sep=1pt, font=\small] {policy retuning\\or rebuild trigger} (feedbackL) -- (warmup.north);
+\draw[arrow] (long.north) |- (13.4,1.45) -- (-0.4,1.45) |- (warmup.north);
 \end{tikzpicture}
