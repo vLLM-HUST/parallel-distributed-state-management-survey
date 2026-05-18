@@ -57,6 +57,13 @@
   \city{Wuhan}
   \country{China}}
 
+\author{Mao Yancan}
+\affiliation{%
+  \institution{ByteDance}
+  \city{Singapore}
+  \country{Singapore}}
+\email{maoyancan@u.nus.edu}
+
 \begin{abstract}
 State is increasingly the main source of both performance leverage and system fragility in modern data systems, from stream processors and transactional streaming engines to edge analytics stacks, large language model serving systems, RAG services, and continual-learning pipelines. Yet the relevant literature remains fragmented across contention-aware access control, hardware-conscious execution, LLM memory management, and long-horizon update and retention mechanisms. This survey asks how a parallel or distributed runtime should manage shared, evolving, and performance-critical state under concurrency, heterogeneous hardware, and non-stationary workloads. We organize prior work around three coupled dimensions: state access and scheduling, state-aware execution, and state evolution and reuse. Across these dimensions, we synthesize the literature through a common scaffold based on state object, control surface, coupling path, evaluation boundary, and remaining systems gap. We also use a propagation-oriented perspective to explain how local mismatches amplify into system-level instability. Building on that synthesis, the survey derives cross-domain mechanism comparisons, a contract-oriented blueprint for stateful runtimes, a taxonomy of recurring anti-patterns, and a disturbance-oriented evaluation agenda. The central systems lesson is that state should be treated as a first-class runtime control problem rather than as a passive storage detail.
 \end{abstract}
